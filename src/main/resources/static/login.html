@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FERRECONTROL - Acceso al Sistema</title>
+    <style>
+        :root {
+            --slate-950: #090e1a;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-700: #334155;
+            --slate-500: #64748b;
+            --slate-300: #cbd5e1;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+            --amber-500: #f59e0b;
+            --amber-600: #d97706;
+            --amber-100: #fef3c7;
+            --emerald-600: #059669;
+            --emerald-100: #d1fae5;
+            --red-600: #dc2626;
+            --red-100: #fee2e2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--slate-950) 0%, var(--slate-800) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            color: var(--slate-900);
+        }
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 960px;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .brand-panel {
+            background: linear-gradient(160deg, var(--slate-900) 0%, #172554 100%);
+            color: #ffffff;
+            padding: 3rem 2.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-panel::after {
+            content: '';
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, transparent 70%);
+            bottom: -100px;
+            right: -80px;
+            pointer-events: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin-bottom: 2.25rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--amber-500), var(--amber-600));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+            flex-shrink: 0;
+        }
+
+        .logo-text h1 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+        }
+
+        .logo-text span {
+            font-size: 0.78rem;
+            color: var(--slate-300);
+            letter-spacing: 0.04em;
+        }
+
+        .brand-copy h2 {
+            font-size: 1.85rem;
+            line-height: 1.25;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .brand-copy p {
+            color: var(--slate-300);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+
+        .feature-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--amber-500);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .brand-footer {
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .form-panel {
+            padding: 2.75rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--slate-100);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 1.75rem;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 0.65rem 1rem;
+            border-radius: 9px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--slate-500);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: var(--slate-900);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+        }
+
+        .form-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-header h3 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-header p {
+            font-size: 0.9rem;
+            color: var(--slate-500);
+        }
+
+        .alert {
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            margin-bottom: 1.25rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .alert.show {
+            display: flex;
+        }
+
+        .alert-error {
+            background: var(--red-100);
+            color: var(--red-600);
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background: var(--emerald-100);
+            color: var(--emerald-600);
+            border: 1px solid #a7f3d0;
+        }
+
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: 0.4rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.72rem 0.9rem;
+            border: 1.5px solid var(--slate-200);
+            border-radius: 10px;
+            font-size: 0.94rem;
+            color: var(--slate-900);
+            background: var(--slate-50);
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--amber-500);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16);
+        }
+
+        .btn-primary {
+            width: 100%;
+            margin-top: 0.5rem;
+            padding: 0.85rem 1.25rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--amber-500), var(--amber-600));
+            color: #ffffff;
+            font-size: 0.96rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.28);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(217, 119, 6, 0.35);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 820px) {
+            .auth-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 460px;
+            }
+            .brand-panel {
+                padding: 2rem;
+            }
+            .brand-copy p, .feature-list, .brand-footer {
+                display: none;
+            }
+            .brand-copy h2 {
+                font-size: 1.35rem;
+                margin-bottom: 0;
+            }
+            .logo {
+                margin-bottom: 1rem;
+            }
+            .form-panel {
+                padding: 2rem 1.75rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <aside class="brand-panel">
+            <div>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>FERRECONTROL</h1>
+                        <span>Gestión de Ferretería</span>
+                    </div>
+                </div>
+
+                <div class="brand-copy">
+                    <h2>Control total de tu inventario en un solo lugar.</h2>
+                    <p>Administra productos, controla alertas de stock mínimo y centraliza tus clientes y proveedores en tiempo real.</p>
+                </div>
+
+                <ul class="feature-list">
+                    <li><span class="feature-dot">✓</span> Control de existencias y reposición rápida</li>
+                    <li><span class="feature-dot">✓</span> Alertas automáticas de productos con bajo stock</li>
+                    <li><span class="feature-dot">✓</span> Directorio de clientes, proveedores y usuarios</li>
+                </ul>
+            </div>
+
+            <div class="brand-footer">
+                FERRECONTROL · Spring Boot + MySQL
+            </div>
+        </aside>
+
+        <main class="form-panel">
+            <div class="tabs">
+                <button type="button" class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Iniciar Sesión</button>
+                <button type="button" class="tab-btn" id="tabRegister" onclick="switchTab('register')">Crear Cuenta</button>
+            </div>
+
+            <div id="alertBox" class="alert" role="alert"></div>
+
+            <!-- Formulario de Login -->
+            <form id="loginForm">
+                <div class="form-header">
+                    <h3>Bienvenido de nuevo</h3>
+                    <p>Ingresa tus credenciales para acceder al dashboard.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginUsername">Usuario</label>
+                    <input type="text" id="loginUsername" name="username" placeholder="Ej. admin" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn-primary" id="btnLogin">Ingresar al Dashboard</button>
+            </form>
+
+            <!-- Formulario de Registro -->
+            <form id="registerForm" class="hidden">
+                <div class="form-header">
+                    <h3>Registrar usuario</h3>
+                    <p>Crea una nueva cuenta para operar en FERRECONTROL.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="regNombre">Nombre completo</label>
+                    <input type="text" id="regNombre" required placeholder="Ej. Carlos Pérez">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="regUsername">Usuario</label>
+                        <input type="text" id="regUsername" required placeholder="Ej. cperez" autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regRol">Rol</label>
+                        <select id="regRol">
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="VENDEDOR" selected>VENDEDOR</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Correo electrónico</label>
+                    <input type="email" id="regEmail" placeholder="correo@ferrecontrol.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword">Contraseña</label>
+                    <input type="password" id="regPassword" required placeholder="Mínimo 4 caracteres" minlength="4" autocomplete="new-password">
+                </div>
+
+                <button type="submit" class="btn-primary" id="btnRegister">Crear Cuenta</button>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'ferrecontrol_user';
+
+        // Si ya existe sesión iniciada, ir directo al dashboard
+        if (localStorage.getItem(STORAGE_KEY)) {
+            window.location.href = 'index.html';
+        }
+
+        const alertBox = document.getElementById('alertBox');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const tabLogin = document.getElementById('tabLogin');
+        const tabRegister = document.getElementById('tabRegister');
+
+        function showAlert(message, type) {
+            alertBox.textContent = message;
+            alertBox.className = `alert show ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+        }
+
+        function clearAlert() {
+            alertBox.className = 'alert';
+            alertBox.textContent = '';
+        }
+
+        function switchTab(tab) {
+            clearAlert();
+            if (tab === 'login') {
+                tabLogin.classList.add('active');
+                tabRegister.classList.remove('active');
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else {
+                tabRegister.classList.add('active');
+                tabLogin.classList.remove('active');
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        async function parseError(response, fallback) {
+            try {
+                const data = await response.json();
+                return data.message || data.error || fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearAlert();
+
+            const btn = document.getElementById('btnLogin');
+            btn.disabled = true;
+            btn.textContent = 'Verificando...';
+
+            const payload = {
+                username: document.getElementById('loginUsername').value.trim(),
+                password: document.getElementById('loginPassword').value
+            };
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const msg = await parseError(response, 'Credenciales inválidas o usuario inactivo.');
+                    showAlert(msg, 'error');
+                    return;
+                }
+
+                const user = await response.json();
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+                window.location.href = 'index.html';
+            } catch (err) {
+                showAlert('No se pudo conectar con el servidor. Verifica que la aplicación esté ejecutándose.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Ingresar al Dashboard';
+            }
+        });
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearAlert();
+
+            const btn = document.getElementById('btnRegister');
+            btn.disabled = true;
+            btn.textContent = 'Registrando...';
+
+            const payload = {
+                nombre: document.getElementById('regNombre').value.trim(),
+                username: document.getElementById('regUsername').value.trim(),
+                email: document.getElementById('regEmail').value.trim(),
+                password: document.getElementById('regPassword').value,
+                rol: document.getElementById('regRol').value,
+                activo: true
+            };
+
+            try {
+                const response = await fetch('/api/usuarios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const msg = await parseError(response, 'No se pudo registrar el usuario.');
+                    showAlert(msg, 'error');
+                    return;
+                }
+
+                registerForm.reset();
+                switchTab('login');
+                document.getElementById('loginUsername').value = payload.username;
+                showAlert('Usuario creado correctamente. Ya puedes iniciar sesión.', 'success');
+            } catch (err) {
+                showAlert('Error de conexión con el servidor.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Crear Cuenta';
+            }
+        });
+    </script>
+</body>
+</html>
